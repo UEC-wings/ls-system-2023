@@ -21,9 +21,9 @@ UART_0_RX   I2C_0_SCL   SPI_1_CSn   GP13  17|     |24   GP18   SPI_0_SCK  I2C_1_
                                     GND   18|     |23   GND
             I2C_1_SDA   SPI_1_SCK   GP14  19|     |22   GP17   SPI_0_CSn  I2C_0_SCL   UART_0_RX
             I2C_1_SCL   SPI_0_TX    GP15  20|     |21   GP16   SPI_0_RX   I2C_0_SDA   UART_0_TX
-*/
 
-#define BAUD_RATE 115200
+BNO055タイムアウト回避のためwire.cppを修正しています。>> https://lipoyang.hatenablog.com/entry/2022/01/23/115201
+*/
 
 #define PIN_IMU_SDA 16
 #define PIN_IMU_SCL 17

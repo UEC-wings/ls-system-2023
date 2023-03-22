@@ -11,9 +11,14 @@
 #include "LsPinAssign.h"
 #include "LsStateFlow.h"
 
+#define BAUD_RATE 115200
+#define DATALOG_FILE "datalog.txt"
+
 SFE_UBLOX_GNSS myGNSS;
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 imu::Quaternion quat; 
+
+unsigned long tm;
 
 bool InitImu(){
   Wire.setSCL(PIN_IMU_SCL);
@@ -47,17 +52,17 @@ void setup1(){
 }
 
 void loop() {
+  tm = millis();
   quat = bno.getQuat();
+  Serial.println(tm);
   delay(1000);
 }
 
 void loop1(){
-  File dataFile = SD.open("datalog.txt", FILE_WRITE);
+  File dataFile = SD.open(DATALOG_FILE, FILE_WRITE);
     if (dataFile) {
-    dataFile.println("0000");
-    dataFile.close();
+      dataFile.close();
   }
-  // if the file isn't open, pop up an error:
   else {
     Serial.println("error opening datalog.txt");
   }
