@@ -18,7 +18,15 @@ SFE_UBLOX_GNSS myGNSS;
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
 imu::Quaternion quat; 
 
-unsigned long tm;
+typedef struct{
+  unsigned long program_time = 0;
+  float quat_w = 1.0;
+  float quat_x = 0.0;
+  float quat_y = 0.0;
+  float quat_z = 0.0;
+}quaternion;
+quaternion _quat;
+
 
 bool InitImu(){
   Wire.setSCL(PIN_IMU_SCL);
@@ -52,15 +60,23 @@ void setup1(){
 }
 
 void loop() {
-  tm = millis();
   quat = bno.getQuat();
-  Serial.println(tm);
+  _quat.program_time = millis();
+  _quat.quat_w = quat.w();
+  _quat.quat_x = quat.x();
+  _quat.quat_y = quat.y();
+  _quat.quat_z = quat.z();
   delay(1000);
 }
 
 void loop1(){
   File dataFile = SD.open(DATALOG_FILE, FILE_WRITE);
     if (dataFile) {
+      dataFile.println(_quat.program_time);
+      dataFile.println(_quat.quat_x);
+      dataFile.println(_quat.quat_x);
+      dataFile.println(_quat.quat_y);
+      dataFile.println(_quat.quat_z);
       dataFile.close();
   }
   else {
