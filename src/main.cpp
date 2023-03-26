@@ -16,26 +16,47 @@
 
 SFE_UBLOX_GNSS myGNSS;
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
-imu::Quaternion quat; 
+imu::Quaternion quat;
+
+unsigned long program_time = 0;
 
 typedef struct{
-  unsigned long program_time = 0;
-  float quat_w = 1.0;
-  float quat_x = 0.0;
-  float quat_y = 0.0;
-  float quat_z = 0.0;
+  const uint8_t HEADER = 0xF0;
+  unsigned long program_time;
+  float quat_w;
+  float quat_x;
+  float quat_y;
+  float quat_z;
 }quaternion;
 quaternion _quat;
 
 
-bool InitImu(){
+bool initImu(){
   Wire.setSCL(PIN_IMU_SCL);
   Wire.setSDA(PIN_IMU_SDA);
   Wire.begin();
   return bno.begin();
 }
 
-bool InitSD(){
+void updateImu(unsigned long millis_time){
+  quat = bno.getQuat();
+  _quat.program_time = millis_time;
+  _quat.quat_w = quat.w();
+  _quat.quat_x = quat.x();
+  _quat.quat_y = quat.y();
+  _quat.quat_z = quat.z();
+}
+
+void loggingImu(File dataFile){
+  dataFile.print(_quat.HEADER);
+  dataFile.print(_quat.program_time);
+  dataFile.print(_quat.quat_x);
+  dataFile.print(_quat.quat_x);
+  dataFile.print(_quat.quat_y);
+  dataFile.print(_quat.quat_z);
+}
+
+bool initSD(){
   SPI.setRX(PIN_SD_MISO);
   SPI.setTX(PIN_SD_MOSI);
   SPI.setSCK(PIN_SD_SCK);
@@ -47,10 +68,10 @@ void setup() {
   Serial.begin(BAUD_RATE);
   Serial.println("System checking...");
 
-  while(!InitImu())Serial.println("IMU...");
+  while(!initImu())Serial.println("IMU...");
   Serial.println("Imu connected");
 
-  while(!InitSD())Serial.println("SD...");
+  while(!initSD())Serial.println("SD...");
   Serial.println("SD connected");
 
 }
@@ -60,23 +81,15 @@ void setup1(){
 }
 
 void loop() {
-  quat = bno.getQuat();
-  _quat.program_time = millis();
-  _quat.quat_w = quat.w();
-  _quat.quat_x = quat.x();
-  _quat.quat_y = quat.y();
-  _quat.quat_z = quat.z();
+  program_time = millis();
+  updateImu(program_time);
   delay(1000);
 }
 
 void loop1(){
   File dataFile = SD.open(DATALOG_FILE, FILE_WRITE);
     if (dataFile) {
-      dataFile.println(_quat.program_time);
-      dataFile.println(_quat.quat_x);
-      dataFile.println(_quat.quat_x);
-      dataFile.println(_quat.quat_y);
-      dataFile.println(_quat.quat_z);
+      loggingImu(dataFile);
       dataFile.close();
   }
   else {
