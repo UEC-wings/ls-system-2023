@@ -32,8 +32,8 @@ const uint8_t FLAG_OFF_7             =   (0 << 7);
 uint8_t flagstate =     FLAG_ON_IMU
                     |   FLAG_ON_GNSS
                     |   FLAG_ON_AIR_SPEED
-                    |   FLAG_ON_AIR_PRESSURE    
+                    |   FLAG_ON_AIR_PRESSURE
                     |   FLAG_ON_ALTITUDE
-                    |   FLAG_ON_NRF52849        
+                    |   FLAG_ON_NRF52849
                     |   FLAG_ON_6
                     |   FLAG_ON_7;
