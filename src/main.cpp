@@ -44,10 +44,21 @@ void setup()
   Serial.begin(BAUD_RATE);
   Serial.println("System checking...");
 
+  Wire.setSCL(PIN_IMU_SCL);
+  Wire.setSDA(PIN_IMU_SDA);
+  Wire.begin();
+
+  Wire1.setSCL(PIN_GNSS_AIR_SCL);
+  Wire1.setSDA(PIN_GNSS_AIR_SDA);
+  Wire1.begin();
+  
   while(!LsImu.initImu())Serial.println("IMU...");
   Serial.println("Imu connected");
 
   //bool b = LsGNSS.initGNSS();
+
+  while(!LsAir.initAir())Serial.println("AirSensor...");
+  Serial.println("AirSensor connected");
 
   while(!initSD())Serial.println("SD...");
   Serial.println("SD connected");
@@ -56,6 +67,7 @@ void setup()
 
 void setup1()
 {
+  LsAir.icp.getElevation();
   delay(3000);
 }
 

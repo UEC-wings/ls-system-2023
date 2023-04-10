@@ -17,10 +17,3 @@ bool LagopusAir::initAir()
   icp.setWorkPattern(icp.eNormal);
   return true;
 }
-
-float LagopusAir::getAltitude()
-{
-  Wire1.beginTransmission(ADDR);
-  altitude = icp.getElevation();
-  return altitude;
-}

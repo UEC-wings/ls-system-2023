@@ -1,7 +1,5 @@
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
-
-#define PIN_GNSS_SDA 12
-#define PIN_GNSS_SCL 13
+#include "LsPinAssign.h"
 
 class LagopusGNSS
 {
@@ -10,6 +8,12 @@ private:
 public:
   LagopusGNSS(/* args */);
   ~LagopusGNSS();
+  typedef struct{
+    const uint8_t HEADER = 0xF1;
+    unsigned long program_time;
+  }gnss;
+  gnss _gnss;
+  gnss* _gnssptr = &_gnss;
   bool initGNSS();
   
 };

@@ -7,9 +7,6 @@ LagopusImu::LagopusImu()
 
 bool LagopusImu::initImu()
 {
-  Wire.setSCL(PIN_IMU_SCL);
-  Wire.setSDA(PIN_IMU_SDA);
-  Wire.begin();
   return bno.begin();
 }
 

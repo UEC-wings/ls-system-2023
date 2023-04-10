@@ -1,9 +1,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <utility/imumaths.h>
-#define PIN_IMU_SDA 16
-#define PIN_IMU_SCL 17
-
+#include "LsPinAssign.h"
 
 
 class LagopusImu
