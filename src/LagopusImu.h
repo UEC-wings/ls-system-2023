@@ -11,6 +11,7 @@ class LagopusImu
 private:
   Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x28, &Wire);
   imu::Quaternion quat;
+
 public:
   LagopusImu();
   ~LagopusImu();
@@ -26,6 +27,6 @@ public:
     float quat_z;
   }quaternion;
   quaternion _quat;
-
+  quaternion* _quatptr = &_quat;
   
 };

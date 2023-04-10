@@ -14,6 +14,12 @@
 #define BAUD_RATE 115200
 #define DATALOG_FILE "datalog.txt"
 
+#define QUEUE_SIZE_ITEMS 10
+#define QUEUE_SIZE_BYTES 10
+
+// Queue creation:
+ArduinoQueue<float> dataQueue(QUEUE_SIZE_ITEMS, QUEUE_SIZE_BYTES);
+
 
 LagopusImu LsImu;
 LagopusGNSS LsGNSS;
@@ -39,13 +45,7 @@ void setup()
   while(!LsImu.sensorInit())Serial.println("IMU...");
   Serial.println("Imu connected");
 
-  bool b = LsGNSS.initGNSS();
-  if (b){
-    Serial.println("GNSS connected");
-  }else{
-    Serial.println("rgaer'gnhaer");
-  }
-  
+  //bool b = LsGNSS.initGNSS();
 
   while(!initSD())Serial.println("SD...");
   Serial.println("SD connected");
@@ -61,6 +61,12 @@ void loop()
 {
   program_time = millis();
   LsImu.updateImu(program_time);
+
+  dataQueue.enqueue(LsImu._quat.quat_w);
+  dataQueue.enqueue(LsImu._quat.quat_x);
+  dataQueue.enqueue(LsImu._quat.quat_y);
+  dataQueue.enqueue(LsImu._quat.quat_z);
+
   Serial.println("@@@@@@@@@@@@@");
   delay(1000);
 }
@@ -68,7 +74,11 @@ void loop()
 void loop1()
 {
   File dataFile = SD.open(DATALOG_FILE, FILE_WRITE);
-    if (dataFile) {
+  if (dataFile) {
+      while(!dataQueue.isEmpty()){
+        float val = dataQueue.dequeue();
+        dataFile.print(val);
+      }
       dataFile.close();
   }
   else {
