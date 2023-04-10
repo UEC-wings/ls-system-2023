@@ -22,4 +22,5 @@ float LagopusAir::getAltitude()
 {
   Wire1.beginTransmission(ADDR);
   altitude = icp.getElevation();
+  return altitude;
 }

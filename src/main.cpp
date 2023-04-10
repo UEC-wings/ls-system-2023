@@ -13,13 +13,13 @@
 #include "LsStateFlow.h"
 
 #define BAUD_RATE 115200
-#define DATALOG_FILE "datalog.txt"
+#define DATALOG_FILE "datalog.bin"
 
 #define QUEUE_SIZE_ITEMS 10
 #define QUEUE_SIZE_BYTES 10
 
 // Queue creation:
-ArduinoQueue<float> dataQueue(QUEUE_SIZE_ITEMS, QUEUE_SIZE_BYTES);
+ArduinoQueue<byte*> dataQueue(QUEUE_SIZE_ITEMS);
 
 
 LagopusImu LsImu;
@@ -63,23 +63,24 @@ void loop()
 {
   program_time = millis();
   LsImu.updateImu(program_time);
+  byte* data = (byte*)LsImu._quatptr;
+  
+  dataQueue.enqueue(data);
 
-  dataQueue.enqueue(LsImu._quat.quat_w);
-  dataQueue.enqueue(LsImu._quat.quat_x);
-  dataQueue.enqueue(LsImu._quat.quat_y);
-  dataQueue.enqueue(LsImu._quat.quat_z);
-
-  Serial.println("@@@@@@@@@@@@@");
+  Serial.println(LsImu._quat.quat_x);
   delay(1000);
 }
 
 void loop1()
 {
   File dataFile = SD.open(DATALOG_FILE, FILE_WRITE);
-  if (dataFile) {
-      while(!dataQueue.isEmpty()){
-        float val = dataQueue.dequeue();
-        dataFile.print(val);
+  if (dataFile && !dataQueue.isEmpty()) {
+      int queueSize = dataQueue.itemCount();
+      Serial.println(queueSize);
+      for (int i = 0; i < queueSize; i++){
+        byte* val = dataQueue.dequeue();
+        size_t dataSize = sizeof(LsImu._quat);
+        dataFile.write(val, dataSize);
       }
       dataFile.close();
   }
