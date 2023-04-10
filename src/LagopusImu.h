@@ -15,7 +15,7 @@ private:
 public:
   LagopusImu();
   ~LagopusImu();
-  bool sensorInit();
+  bool initImu();
   void updateImu(unsigned long millsTime);
   void serialDebug();
   typedef struct{

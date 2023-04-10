@@ -8,6 +8,7 @@
 
 #include "LagopusImu.h"
 #include "LagopusGNSS.h"
+#include "LagopusAir.h"
 #include "LsPinAssign.h"
 #include "LsStateFlow.h"
 
@@ -23,6 +24,7 @@ ArduinoQueue<float> dataQueue(QUEUE_SIZE_ITEMS, QUEUE_SIZE_BYTES);
 
 LagopusImu LsImu;
 LagopusGNSS LsGNSS;
+LagopusAir LsAir;
 
 
 unsigned long program_time = 0;
@@ -42,7 +44,7 @@ void setup()
   Serial.begin(BAUD_RATE);
   Serial.println("System checking...");
 
-  while(!LsImu.sensorInit())Serial.println("IMU...");
+  while(!LsImu.initImu())Serial.println("IMU...");
   Serial.println("Imu connected");
 
   //bool b = LsGNSS.initGNSS();
