@@ -47,18 +47,19 @@ void setup()
   Wire.setSCL(PIN_IMU_SCL);
   Wire.setSDA(PIN_IMU_SDA);
   Wire.begin();
-
+  delay(1000);
   Wire1.setSCL(PIN_GNSS_AIR_SCL);
   Wire1.setSDA(PIN_GNSS_AIR_SDA);
   Wire1.begin();
-  
+  delay(1000);
   while(!LsImu.initImu())Serial.println("IMU...");
   Serial.println("Imu connected");
 
-  //bool b = LsGNSS.initGNSS();
-
-  while(!LsAir.initAir())Serial.println("AirSensor...");
-  Serial.println("AirSensor connected");
+  while(!LsGNSS.initGNSS())Serial.println("GNSS...");
+  Serial.println("GNSS connected");
+  delay(1000);
+  //while(!LsAir.initAir())Serial.println("AirSensor...");
+  //Serial.println("AirSensor connected");
 
   while(!initSD())Serial.println("SD...");
   Serial.println("SD connected");
@@ -67,7 +68,6 @@ void setup()
 
 void setup1()
 {
-  LsAir.icp.getElevation();
   delay(3000);
 }
 
@@ -80,6 +80,8 @@ void loop()
   dataQueue.enqueue(data);
 
   Serial.println(LsImu._quat.quat_x);
+  Serial.println(LsAir.icp.getAirPressure());
+  LsGNSS.myGNSS.getDOP();
   delay(1000);
 }
 

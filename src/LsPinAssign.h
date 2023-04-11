@@ -28,8 +28,8 @@ BNO055タイムアウト回避のためwire.cppを修正しています。>> htt
 #define PIN_IMU_SDA 16
 #define PIN_IMU_SCL 17
 
-#define PIN_GNSS_AIR_SDA 12
-#define PIN_GNSS_AIR_SCL 13
+#define PIN_GNSS_AIR_SDA 14
+#define PIN_GNSS_AIR_SCL 15
 
 #define PIN_SD_MISO 0
 #define PIN_SD_CS 1

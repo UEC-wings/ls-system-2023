@@ -4,7 +4,7 @@
 class LagopusGNSS
 {
 private:
-  SFE_UBLOX_GNSS myGNSS;
+  
 public:
   LagopusGNSS(/* args */);
   ~LagopusGNSS();
@@ -15,6 +15,6 @@ public:
   gnss _gnss;
   gnss* _gnssptr = &_gnss;
   bool initGNSS();
-  
+  SFE_UBLOX_GNSS myGNSS;
 };
 
