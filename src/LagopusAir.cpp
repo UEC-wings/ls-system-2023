@@ -17,3 +17,16 @@ bool LagopusAir::initAir()
   icp.setWorkPattern(icp.eNormal);
   return true;
 }
+
+void LagopusAir::updateAir(unsigned long millsTime){
+  _air.program_time = millsTime;
+  _air.temp = icp.getTemperature();
+  _air.air_pressure = icp.getAirPressure();
+}
+
+void LagopusAir::serialOutput()
+{
+  Serial.println(_air.program_time);
+  Serial.println(_air.temp);
+  Serial.println(_air.air_pressure);
+}

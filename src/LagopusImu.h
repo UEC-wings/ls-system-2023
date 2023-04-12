@@ -15,7 +15,7 @@ public:
   ~LagopusImu();
   bool initImu();
   void updateImu(unsigned long millsTime);
-  void serialDebug();
+  void serialOutput();
   typedef struct{
     const uint8_t HEADER = 0xF0;
     unsigned long program_time;

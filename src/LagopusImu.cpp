@@ -20,11 +20,11 @@ void LagopusImu::updateImu(unsigned long millisTime)
   _quat.quat_z = quat.z();
 }
 
-void LagopusImu::serialDebug()
+void LagopusImu::serialOutput()
 {
-  Serial.print(_quat.program_time);
-  Serial.print(_quat.quat_w);
-  Serial.print(_quat.quat_x);
-  Serial.print(_quat.quat_y);
-  Serial.print(_quat.quat_z);
+  Serial.println(_quat.program_time);
+  Serial.println(_quat.quat_w);
+  Serial.println(_quat.quat_x);
+  Serial.println(_quat.quat_y);
+  Serial.println(_quat.quat_z);
 }

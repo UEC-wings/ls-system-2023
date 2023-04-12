@@ -14,7 +14,11 @@ public:
     float temp;
     float air_pressure;
   }airPressure;
+  airPressure _air;
+  airPressure* _airptr = &_air;
   DFRobot_ICP10111 icp;
   bool initAir();
+  void updateAir(unsigned long millisTime);
+  void serialOutput();
 };
 
