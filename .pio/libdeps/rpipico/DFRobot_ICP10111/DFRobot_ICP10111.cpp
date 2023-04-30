@@ -160,3 +160,8 @@ uint8_t DFRobot_ICP10111::readReg(uint16_t reg, void* pBuf, size_t size)
   return 0;
 }
 
+float DFRobot_ICP10111::getAirPressureFrom_t(void)
+{
+  return _t->airPressure;
+}
+

@@ -87,6 +87,9 @@ public:
    * @return Return the calculated elevation
    */
   float getElevation(void);
+
+  float getAirPressureFrom_t(void);
+
     
 private:
 

@@ -28,6 +28,8 @@ LagopusAir LsAir;
 // プログラム内の時間
 unsigned long program_time = 0;
 
+const size_t payload_size = (sizeof(float) * 8);
+
 bool initSD()
 {
   SPI.setRX(PIN_SD_MISO);
@@ -42,12 +44,12 @@ void setup()
   delay(5000);
   Serial.begin(BAUD_RATE);
   Serial.println("System checking...");
-  Wire.setSCL(PIN_IMU_SCL);
-  Wire.setSDA(PIN_IMU_SDA);
+  Wire.setSCL(PIN_IMU_AIR_SCL0);
+  Wire.setSDA(PIN_IMU_AIR_SDA0);
   Wire.begin();
   delay(500);
-  Wire1.setSCL(PIN_GNSS_AIR_SCL);
-  Wire1.setSDA(PIN_GNSS_AIR_SDA);
+  Wire1.setSCL(PIN_GNSS_SCL1);
+  Wire1.setSDA(PIN_GNSS_SDA1);
   Wire1.begin();
   delay(500);
 
@@ -76,22 +78,24 @@ void setup1()
 
 void loop()
 {
-  program_time = millis();
-  LsImu.updateImu(program_time);
-  byte* dataImu = (byte*)LsImu._quatptr;
-  dataQueue.enqueue(dataImu);
+  LsImu.updateImu(millis());
 
-  program_time = millis();
-  LsGNSS.updateGNSS(program_time);
+  byte* dataAccGyro = (byte*)LsImu._accgyroptr;
+  dataQueue.enqueue(dataAccGyro);
+  
+  byte* dataQuatMag = (byte*)LsImu._quatmagptr;
+  dataQueue.enqueue(dataQuatMag);
+
+  LsGNSS.updateGNSS(millis());
   byte* dataGnss = (byte*)LsGNSS._gnssptr;
   dataQueue.enqueue(dataGnss);
   
-  program_time = millis();
-  LsAir.updateAir(program_time);
+  LsAir.updateAir(millis());
   byte* dataAir = (byte*)LsAir._airptr;
   dataQueue.enqueue(dataAir);
 
-  LsImu.serialOutput();
+  LsImu.serialOutputQuatMag();
+  LsImu.serialOutputAccGyro();
   LsGNSS.serialOutput();
   LsAir.serialOutput();
 
@@ -105,11 +109,10 @@ void loop1()
       int queueSize = dataQueue.itemCount();
       Serial.println(queueSize);
       for (int i = 0; i < queueSize; i++){
-        size_t dataSize = sizeof(LsImu._quat);
         byte* val = dataQueue.dequeue();
         Serial.print("datasize>>");
-        Serial.println(dataSize);
-        dataFile.write(val, dataSize);
+        Serial.println(payload_size);
+        dataFile.write(val, payload_size);
       }
       dataFile.close();
   }

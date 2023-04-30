@@ -25,15 +25,37 @@ UART_0_RX   I2C_0_SCL   SPI_1_CSn   GP13  17|     |24   GP18   SPI_0_SCK  I2C_1_
 BNO055タイムアウト回避のためwire.cppを修正しています。>> https://lipoyang.hatenablog.com/entry/2022/01/23/115201
 */
 
-#define PIN_IMU_SDA 16
-#define PIN_IMU_SCL 17
+#define PIN_IMU_AIR_SDA0 12
+#define PIN_IMU_AIR_SCL0 13
 
-#define PIN_GNSS_AIR_SDA 14
-#define PIN_GNSS_AIR_SCL 15
+#define PIN_GNSS_SDA1 2
+#define PIN_GNSS_SCL1 3
+#define PIN_GNSS_PPS 5
 
-#define PIN_SD_MISO 0
-#define PIN_SD_CS 1
-#define PIN_SD_SCK 2
-#define PIN_SD_MOSI 3
+#define PIN_SD_MISO0 16
+#define PIN_SD_CS0 17
+#define PIN_SD_SCK0 18
+#define PIN_SD_MOSI0 19
 
+#define PIN_AUDIO_TX0 0
+#define PIN_AUDIO_RX0 1
 
+#define PIN_XIAO_TX1 8
+#define PIN_XIAO_RX1 9
+
+#define PIN_RS485_TXPIO0 10
+#define PIN_RS485_RXPIO0 11
+#define PIN_RS485_CTRL 7
+
+#define PIN_VBAT 26
+//バッテリ電圧 = (10/1.8)*VBATピン電圧
+
+#define PIN_BUTTON0 21
+#define PIN_BUTTON1 22
+//ボタンとアナログピンのGPIO番号は基板上に表記あり
+#define PIN_ADC0 27
+#define PIN_ADC1 28
+
+#define PIN_QC_DM 14
+#define PIN_QC_DP 15
+//QuickCharge動かないっぽい

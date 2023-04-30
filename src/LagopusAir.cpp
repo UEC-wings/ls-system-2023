@@ -21,12 +21,21 @@ bool LagopusAir::initAir()
 void LagopusAir::updateAir(unsigned long millsTime){
   _air.program_time = millsTime;
   _air.temp = icp.getTemperature();
-  _air.air_pressure = icp.getAirPressure();
+  _air.air_pressure_1 = icp.getAirPressureFrom_t();
+  _air.air_pressure_2 = icp.getAirPressure();
+  _air.air_pressure_3 = icp.getAirPressure();
+  _air.air_pressure_4 = icp.getAirPressure();
+  _air.air_pressure_5 = icp.getAirPressure();
 }
 
 void LagopusAir::serialOutput()
 {
+  Serial.print(_air.HEADER);
   Serial.println(_air.program_time);
   Serial.println(_air.temp);
-  Serial.println(_air.air_pressure);
+  Serial.println(_air.air_pressure_1);
+  Serial.println(_air.air_pressure_2);
+  Serial.println(_air.air_pressure_3);
+  Serial.println(_air.air_pressure_4);
+  Serial.println(_air.air_pressure_5);
 }

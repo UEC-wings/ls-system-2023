@@ -11,10 +11,12 @@ public:
   typedef struct{
     const uint8_t HEADER = 0xF1;
     unsigned long program_time;
+    uint32_t unixEpoch;
     long latitude;
     long longitude;
     long altitude;
-    byte siv;
+    uint16_t pdop;
+    uint8_t siv;
   }gnss;
   gnss _gnss;
   gnss* _gnssptr = &_gnss;
