@@ -47,7 +47,7 @@ public:
    * @param address I2C address
    * @return None 
    */
-    DFRobot_ICP10111(TwoWire *pWire = &Wire1, uint8_t address = 0x63);
+    DFRobot_ICP10111(TwoWire *pWire = &Wire, uint8_t address = 0x63);
 
   /**
    * @fn begin

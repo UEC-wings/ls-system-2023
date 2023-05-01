@@ -5,6 +5,10 @@
 
 #include <ArduinoQueue.h>
 
+// センサークラス
+#include "utils/NuttX.h"
+#include "utils/RS485.h"
+
 // 自作クラス
 #include "LagopusImu.h"
 #include "LagopusGNSS.h"
@@ -20,6 +24,10 @@
 // Queue creation:
 ArduinoQueue<byte*> dataQueue(QUEUE_SIZE_ITEMS);
 
+// センサークラス
+NuttX Audio;
+RS485 Sensor;
+
 // 自作クラス
 LagopusImu LsImu;
 LagopusGNSS LsGNSS;
@@ -32,11 +40,11 @@ const size_t payload_size = (sizeof(float) * 8);
 
 bool initSD()
 {
-  SPI.setRX(PIN_SD_MISO);
-  SPI.setTX(PIN_SD_MOSI);
-  SPI.setSCK(PIN_SD_SCK);
-  SPI.setCS(PIN_SD_CS);
-  return SD.begin(PIN_SD_CS);
+  SPI.setRX(PIN_SD_MISO0);
+  SPI.setTX(PIN_SD_MOSI0);
+  SPI.setSCK(PIN_SD_SCK0);
+  SPI.setCS(PIN_SD_CS0);
+  return SD.begin(PIN_SD_CS0);
 }
 
 void setup() 

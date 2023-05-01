@@ -26,11 +26,18 @@ void LagopusGNSS::updateGNSS(unsigned long millisTime)
 void LagopusGNSS::serialOutput()
 {
   Serial.print(_gnss.HEADER);
+  Serial.print(", ");
   Serial.print(_gnss.program_time);
+  Serial.print(", ");
   Serial.print(_gnss.unixEpoch);
+  Serial.print(", ");
   Serial.print(_gnss.latitude);
+  Serial.print(", ");
   Serial.print(_gnss.longitude);
+  Serial.print(", ");
   Serial.print(_gnss.altitude);
+  Serial.print(", ");
   Serial.print(_gnss.pdop);
+  Serial.print(", ");
   Serial.println(_gnss.siv);
 }

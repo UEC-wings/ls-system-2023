@@ -47,38 +47,41 @@ void LagopusImu::updateQuatMag()
 
 }
 
-void LagopusImu::updateAccGyro(unsigned long millsTime){
-  _accgyro.program_time = millsTime;
-  bno.getEvent(&linearAccelData, Adafruit_BNO055::VECTOR_LINEARACCEL);
-  bno.getEvent(&angVelocityData, Adafruit_BNO055::VECTOR_GYROSCOPE);
-  _accgyro.acc_x = linearAccelData.acceleration.x;
-  _accgyro.acc_y = linearAccelData.acceleration.y;
-  _accgyro.acc_z = linearAccelData.acceleration.z;
-  _accgyro.gyro_x = angVelocityData.gyro.x;
-  _accgyro.gyro_y = angVelocityData.gyro.y;
-  _accgyro.gyro_z = angVelocityData.gyro.z;
-}
 
 void LagopusImu::serialOutputQuatMag()
 {
   Serial.print(_quatmag.HEADER);
+  Serial.print(", ");
   Serial.print(_quatmag.quat_w);
+  Serial.print(", ");
   Serial.print(_quatmag.quat_x);
+  Serial.print(", ");
   Serial.print(_quatmag.quat_y);
+  Serial.print(", ");
   Serial.print(_quatmag.quat_z);
+  Serial.print(", ");
   Serial.print(_quatmag.mag_x);
+  Serial.print(", ");
   Serial.print(_quatmag.mag_y);
+  Serial.print(", ");
   Serial.println(_quatmag.mag_z);
 }
 
 void LagopusImu::serialOutputAccGyro()
 {
   Serial.print(_accgyro.HEADER);
+  Serial.print(", ");
   Serial.print(_accgyro.program_time);
+  Serial.print(", ");
   Serial.print(_accgyro.acc_x);
+  Serial.print(", ");
   Serial.print(_accgyro.acc_y);
+  Serial.print(", ");
   Serial.print(_accgyro.acc_z);
+  Serial.print(", ");
   Serial.print(_accgyro.gyro_x);
+  Serial.print(", ");
   Serial.print(_accgyro.gyro_y);
+  Serial.print(", ");
   Serial.println(_accgyro.gyro_z);
 }

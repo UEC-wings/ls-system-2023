@@ -31,11 +31,18 @@ void LagopusAir::updateAir(unsigned long millsTime){
 void LagopusAir::serialOutput()
 {
   Serial.print(_air.HEADER);
+  Serial.print(", ");
   Serial.println(_air.program_time);
+  Serial.print(", ");
   Serial.println(_air.temp);
+  Serial.print(", ");
   Serial.println(_air.air_pressure_1);
+  Serial.print(", ");
   Serial.println(_air.air_pressure_2);
-  Serial.println(_air.air_pressure_3);
-  Serial.println(_air.air_pressure_4);
+  Serial.print(", ");
+  Serial.print(_air.air_pressure_3);
+  Serial.print(", ");
+  Serial.print(_air.air_pressure_4);
+  Serial.print(", ");
   Serial.println(_air.air_pressure_5);
 }
