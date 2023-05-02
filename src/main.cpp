@@ -5,11 +5,10 @@
 
 #include <ArduinoQueue.h>
 
-// センサークラス
+// 音声再生クラス
 #include "utils/NuttX.h"
-#include "utils/RS485.h"
 
-// 自作クラス
+// センサークラス
 #include "LagopusImu.h"
 #include "LagopusGNSS.h"
 #include "LagopusAir.h"
@@ -21,12 +20,11 @@
 
 #define QUEUE_SIZE_ITEMS 3
 
-// Queue creation:
+// データログ用のQueue
 ArduinoQueue<byte*> dataQueue(QUEUE_SIZE_ITEMS);
 
-// センサークラス
+// 音声再生クラス
 NuttX Audio;
-RS485 Sensor;
 
 // 自作クラス
 LagopusImu LsImu;
@@ -36,7 +34,8 @@ LagopusAir LsAir;
 // プログラム内の時間
 unsigned long program_time = 0;
 
-const size_t payload_size = (sizeof(float) * 8);
+// センサーログ構造体は32byte固定
+const size_t PAYLOAD_SIZE = (sizeof(float) * 8);
 
 bool initSD()
 {
@@ -113,16 +112,27 @@ void loop()
 void loop1()
 {
   File dataFile = SD.open(DATALOG_FILE, FILE_WRITE);
-  if (dataFile && !dataQueue.isEmpty()) {
+  if (dataFile && !dataQueue.isEmpty()) 
+  {
       int queueSize = dataQueue.itemCount();
       Serial.println(queueSize);
-      for (int i = 0; i < queueSize; i++){
+      for (int i = 0; i < queueSize; i++)
+      {
         byte* val = dataQueue.dequeue();
         Serial.print("datasize>>");
-        Serial.println(payload_size);
-        dataFile.write(val, payload_size);
+        Serial.println(PAYLOAD_SIZE);
+        dataFile.write(val, PAYLOAD_SIZE);
       }
       dataFile.close();
   }
-  delay(1000);
+
+  NutStatus nutStatus = Audio.play("2022_1.wav");
+  if(nutStatus == NUTTX_BUSY)
+  {
+    Serial.println("NUTTX_BUSY");
+  } else if (nutStatus == NUTTX_NOT_FOUND)
+  {
+    Serial.println("NUTTX_NOT_FOUND");
+  }
+
 }
