@@ -15,8 +15,8 @@ public:
     long latitude;
     long longitude;
     long altitude;
-    uint16_t pdop;
-    uint8_t siv;
+    long groundSpeed;
+    long heading;
   }gnss;
   gnss _gnss;
   gnss* _gnssptr = &_gnss;

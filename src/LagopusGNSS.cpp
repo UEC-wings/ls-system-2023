@@ -19,8 +19,8 @@ void LagopusGNSS::updateGNSS(unsigned long millisTime)
   _gnss.latitude = myGNSS.getLatitude();
   _gnss.longitude = myGNSS.getLongitude();
   _gnss.altitude = myGNSS.getAltitudeMSL();
-  _gnss.pdop = myGNSS.getPDOP();
-  _gnss.siv = myGNSS.getSIV();
+  _gnss.groundSpeed = myGNSS.getGroundSpeed();
+  _gnss.heading = myGNSS.getHeading();
 }
 
 void LagopusGNSS::serialOutput()
@@ -37,7 +37,7 @@ void LagopusGNSS::serialOutput()
   Serial.print(", ");
   Serial.print(_gnss.altitude);
   Serial.print(", ");
-  Serial.print(_gnss.pdop);
+  Serial.print(_gnss.groundSpeed);
   Serial.print(", ");
-  Serial.println(_gnss.siv);
+  Serial.println(_gnss.heading);
 }
