@@ -17,7 +17,7 @@
 
 #define BAUD_RATE 115200
 #define SERIALPIO_BAUD_RATE 9600 
-#define DATALOG_FILE "datalog1.bin"
+#define DATALOG_FILE "datalog.bin"
 
 #define QUEUE_SIZE_ITEMS 3
 

@@ -57,10 +57,12 @@ void LagopusAltimeter::updateUltrasonic(){
   if (ultrasonic.read() != -1){
     alti.height_1 = ultrasonic.dist;
   }
+  delay(100);
   ultrasonic.request(ULTRASONIC, REALTIME);
   if (ultrasonic.read() != -1){
     alti.height_2 = ultrasonic.dist;
   }
+  delay(100);
   ultrasonic.request(ULTRASONIC, REALTIME);
   if (ultrasonic.read() != -1){
     alti.height_3= ultrasonic.dist;
