@@ -42,5 +42,8 @@ public:
   void updateUltrasonic();
   void serialUltrasonicOutput();
   // ************************
+
+  void updateAirSensor(unsigned long millsTime);
+  void serialAltimeterOutput();
 };
 

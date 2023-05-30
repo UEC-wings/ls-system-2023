@@ -3,13 +3,11 @@ uint8_t 符号なし1byte整数
 
 データログのヘッダ
 IMU_QuatMag     >> 0xF0
-GNSS    >> 0xF1
-AIR_SPEED >> 0xF2
-AIR_PRESSURE >> 0xF3
-ALTITUDE >> 0xF4
-NRF52840 >> 0xF5
-IMU_AccGyro >> 0xF6
-
+GNSS            >> 0xF1
+PITOT_TUBE      >> 0xF2
+ALTIMETER       >> 0xF3
+NRF52840        >> 0xF5
+IMU_AccGyro     >> 0xF6
 */ 
 
 const uint8_t FLAG_ON_IMU           =   (1 << 1); // 0000 0001

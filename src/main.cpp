@@ -96,6 +96,7 @@ void setup1()
   Audio.init(Serial1);
   Serial.println("setup1 close");
   delay(3000);
+  NutStatus nutStatus = Audio.play("2022_7.wav");
 }
 
 void loop()
@@ -108,8 +109,8 @@ void loop()
   byte* dataQuatMag = (byte*)LsImu._quatmagptr;
   dataQueue.enqueue(dataQuatMag);
 
-  LsImu.serialOutputQuatMag();
-  LsImu.serialOutputAccGyro();
+  //LsImu.serialOutputQuatMag();
+  //LsImu.serialOutputAccGyro();
   
   LsGNSS.updateGNSS(millis());
   byte* dataGnss = (byte*)LsGNSS._gnssptr;
@@ -117,18 +118,14 @@ void loop()
 
   LsGNSS.serialOutput();
   
-  LsAlti.updateAir(millis());
-  LsAlti.serialAirPressureOutput();
-
-
-  LsAlti.updateUltrasonic();
-  LsAlti.serialUltrasonicOutput();
+  LsAlti.updateAirSensor(millis());
+  LsAlti.serialAltimeterOutput();
 
 
   byte* dataAlti = (byte*)LsAlti.altiptr;
   dataQueue.enqueue(dataAlti);
 
-  delay(300);
+  delay(100);
 }
 
 void loop1()
@@ -148,18 +145,6 @@ void loop1()
       dataFile.close();
   }
 
-  /*
-  NutStatus nutStatus = Audio.play("2022_1.wav");
-  if(nutStatus == NUTTX_BUSY)
-  {
-    Serial.println("NUTTX_BUSY");
-  } else
-  {
-    Serial.println("NUTTX_PLAY");
-  }
-
-  */
-
-  delay(500);
+  delay(250);
 
 }
