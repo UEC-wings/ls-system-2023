@@ -32,8 +32,25 @@ LagopusImu LsImu;
 LagopusGNSS LsGNSS;
 LagopusAltimeter LsAlti;
 
+// BLE受信用nRF52840
+SerialPIO xiaoSerial(PIN_XIAO_TX1, PIN_XIAO_RX1);
+
 // RS485超音波センサ
 SerialPIO mySerial(PIN_RS485_TXPIO0, PIN_RS485_RXPIO0);
+
+
+
+void getPowerMeterData()
+{
+  xiaoSerial.print("read");
+  delay(20);
+  if (xiaoSerial.available())
+  {
+    delay(20); // データがくるまで待機
+    String data = xiaoSerial.readString();
+    Serial.println(data);
+  }
+}
 
 // プログラム内の時間
 unsigned long program_time = 0;
@@ -56,7 +73,8 @@ void setup()
   delay(1000);
   Serial.println("System checking...");
   mySerial.begin(SERIALPIO_BAUD_RATE);
-  delay(2000);
+  xiaoSerial.begin(SERIALPIO_BAUD_RATE);
+  delay(500);
   
   Wire.setSCL(PIN_IMU_AIR_SCL0);
   Wire.setSDA(PIN_IMU_AIR_SDA0);
@@ -109,21 +127,18 @@ void loop()
   byte* dataQuatMag = (byte*)LsImu._quatmagptr;
   dataQueue.enqueue(dataQuatMag);
 
-  //LsImu.serialOutputQuatMag();
-  //LsImu.serialOutputAccGyro();
-  
   LsGNSS.updateGNSS(millis());
   byte* dataGnss = (byte*)LsGNSS._gnssptr;
   dataQueue.enqueue(dataGnss);
 
-  LsGNSS.serialOutput();
+  //LsGNSS.serialOutput();
   
   LsAlti.updateAirSensor(millis());
-  LsAlti.serialAltimeterOutput();
-
-
+  
   byte* dataAlti = (byte*)LsAlti.altiptr;
   dataQueue.enqueue(dataAlti);
+
+  getPowerMeterData();
 
   delay(100);
 }
@@ -134,17 +149,15 @@ void loop1()
   if (dataFile && !dataQueue.isEmpty()) 
   {
       int queueSize = dataQueue.itemCount();
-      Serial.println(queueSize);
+      //Serial.println(queueSize);
       for (int i = 0; i < queueSize; i++)
       {
         byte* val = dataQueue.dequeue();
-        Serial.print("datasize>>");
-        Serial.println(PAYLOAD_SIZE);
         dataFile.write(val, PAYLOAD_SIZE);
       }
       dataFile.close();
   }
 
-  delay(250);
+
 
 }

@@ -6,7 +6,7 @@ IMU_QuatMag     >> 0xF0
 GNSS            >> 0xF1
 PITOT_TUBE      >> 0xF2
 ALTIMETER       >> 0xF3
-NRF52840        >> 0xF5
+POWER_METER        >> 0xF5
 IMU_AccGyro     >> 0xF6
 */ 
 
