@@ -19,7 +19,7 @@
 #define SERIALPIO_BAUD_RATE 9600 
 #define DATALOG_FILE "datalog.bin"
 
-#define QUEUE_SIZE_ITEMS 3
+#define QUEUE_SIZE_ITEMS 10
 
 // データログ用のQueue
 ArduinoQueue<byte*> dataQueue(QUEUE_SIZE_ITEMS);
@@ -32,22 +32,24 @@ LagopusImu LsImu;
 LagopusGNSS LsGNSS;
 LagopusAltimeter LsAlti;
 
-// BLE受信用nRF52840
-SerialPIO xiaoSerial(PIN_XIAO_TX1, PIN_XIAO_RX1);
 
 // RS485超音波センサ
 SerialPIO mySerial(PIN_RS485_TXPIO0, PIN_RS485_RXPIO0);
 
+// BLE受信用nRF52840
+SerialPIO xiaoSerial(PIN_XIAO_TX1, PIN_XIAO_RX1);
 
 
 void getPowerMeterData()
 {
-  xiaoSerial.print("read");
+  xiaoSerial.write("read");
   delay(20);
   if (xiaoSerial.available())
   {
     delay(20); // データがくるまで待機
     String data = xiaoSerial.readString();
+    data.trim();
+    data.replace('B', ',');
     Serial.println(data);
   }
 }
@@ -131,7 +133,7 @@ void loop()
   byte* dataGnss = (byte*)LsGNSS._gnssptr;
   dataQueue.enqueue(dataGnss);
 
-  //LsGNSS.serialOutput();
+  LsGNSS.serialOutput();
   
   LsAlti.updateAirSensor(millis());
   
