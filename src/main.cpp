@@ -12,6 +12,7 @@
 #include "LagopusImu.h"
 #include "LagopusGNSS.h"
 #include "LagopusAltimeter.h"
+#include "LagopusPowerMeter.h"
 #include "LsPinAssign.h"
 #include "LsStateFlow.h"
 
@@ -31,26 +32,11 @@ NuttX Audio;
 LagopusImu LsImu;
 LagopusGNSS LsGNSS;
 LagopusAltimeter LsAlti;
+LagopusPowerMeter LsPower;
 
-// BLE受信用nRF52840
-SerialPIO xiaoSerial(PIN_XIAO_TX1, PIN_XIAO_RX1);
 
 // RS485超音波センサ
 SerialPIO mySerial(PIN_RS485_TXPIO0, PIN_RS485_RXPIO0);
-
-
-
-void getPowerMeterData()
-{
-  xiaoSerial.print("read");
-  delay(20);
-  if (xiaoSerial.available())
-  {
-    delay(20); // データがくるまで待機
-    String data = xiaoSerial.readString();
-    Serial.println(data);
-  }
-}
 
 // プログラム内の時間
 unsigned long program_time = 0;
@@ -73,7 +59,6 @@ void setup()
   delay(1000);
   Serial.println("System checking...");
   mySerial.begin(SERIALPIO_BAUD_RATE);
-  xiaoSerial.begin(SERIALPIO_BAUD_RATE);
   delay(500);
   
   Wire.setSCL(PIN_IMU_AIR_SCL0);
@@ -97,6 +82,8 @@ void setup()
   while(!LsAlti.initUltrasonic(mySerial))Serial.println("Ultrasonic...");
   Serial.println("Ultrasonic connectted");
   delay(100);
+  while(!LsPower.initPower())Serial.println("Power...");
+  Serial.println("PowerM connected");
   while(!initSD())Serial.println("SD...");
   Serial.println("SD connected");
   delay(100);
@@ -123,7 +110,7 @@ void loop()
 
   byte* dataAccGyro = (byte*)LsImu._accgyroptr;
   dataQueue.enqueue(dataAccGyro);
-  
+
   byte* dataQuatMag = (byte*)LsImu._quatmagptr;
   dataQueue.enqueue(dataQuatMag);
 
@@ -131,14 +118,21 @@ void loop()
   byte* dataGnss = (byte*)LsGNSS._gnssptr;
   dataQueue.enqueue(dataGnss);
 
-  //LsGNSS.serialOutput();
+  LsGNSS.serialOutput();
   
   LsAlti.updateAirSensor(millis());
   
   byte* dataAlti = (byte*)LsAlti.altiptr;
   dataQueue.enqueue(dataAlti);
 
-  getPowerMeterData();
+  LsAlti.serialAltimeterOutput();
+
+  LsPower.updatePower(millis());
+  byte* dataPower = (byte*)LsPower._powerptr;
+  dataQueue.enqueue(dataPower);
+
+  LsPower.serialPowerOutput();
+
 
   delay(100);
 }
@@ -149,7 +143,6 @@ void loop1()
   if (dataFile && !dataQueue.isEmpty()) 
   {
       int queueSize = dataQueue.itemCount();
-      //Serial.println(queueSize);
       for (int i = 0; i < queueSize; i++)
       {
         byte* val = dataQueue.dequeue();
@@ -157,7 +150,4 @@ void loop1()
       }
       dataFile.close();
   }
-
-
-
 }

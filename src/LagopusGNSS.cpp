@@ -25,19 +25,22 @@ void LagopusGNSS::updateGNSS(unsigned long millisTime)
 
 void LagopusGNSS::serialOutput()
 {
-  Serial.print(_gnss.HEADER);
-  Serial.print(", ");
-  Serial.print(_gnss.program_time);
-  Serial.print(", ");
-  Serial.print(_gnss.unixEpoch);
-  Serial.print(", ");
+  /*
+  Serial.print("gps");
+  Serial.print(",");
+  //Serial.print(_gnss.program_time);
+  //Serial.print(",");
+  //Serial.print(_gnss.unixEpoch);
+  //Serial.print(",");
   Serial.print(_gnss.latitude);
-  Serial.print(", ");
+  Serial.print(",");
   Serial.print(_gnss.longitude);
-  Serial.print(", ");
+  Serial.print(",");
   Serial.print(_gnss.altitude);
-  Serial.print(", ");
+  Serial.print(",");
   Serial.print(_gnss.groundSpeed);
-  Serial.print(", ");
+  Serial.print(",");
   Serial.println(_gnss.heading);
+  */
+  Serial.printf("gps,%d,%d,%d,%d,%d\n", _gnss.latitude, _gnss.longitude, _gnss.altitude, _gnss.groundSpeed, _gnss.heading);
 }

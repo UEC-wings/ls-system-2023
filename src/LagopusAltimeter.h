@@ -21,11 +21,11 @@ public:
     const uint8_t HEADER = 0xF3;
     unsigned long program_time;
     float temp;
-    long height_1;
-    long height_2;
-    long height_3;
-    float air_pressure_1;
-    float air_pressure_2;
+    long height_1=0;
+    long height_2=0;
+    long height_3=0;
+    float air_pressure_1=0;
+    float air_pressure_2=0;
   }Altimeter;
   Altimeter alti;
   Altimeter* altiptr = &alti;

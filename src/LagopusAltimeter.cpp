@@ -20,109 +20,26 @@ bool LagopusAltimeter::initAir()
   return true;
 }
 
-void LagopusAltimeter::updateAir(unsigned long millsTime){
-  alti.program_time = millsTime;
-  alti.temp = icp.getTemperature();
-  // 温度を取得するときに大気圧も取得しているのでその値をそのまま使う
-  alti.air_pressure_1 = icp.getAirPressureFrom_t();
-  alti.air_pressure_2 = icp.getAirPressure();
-}
-
-void LagopusAltimeter::serialAirPressureOutput()
-{
-  Serial.print(alti.HEADER);
-  Serial.print(", ");
-  Serial.print(alti.program_time);
-  Serial.print(", ");
-  Serial.print(alti.temp);
-  Serial.print(", ");
-  Serial.print(alti.air_pressure_1);
-  Serial.print(", ");
-  Serial.println(alti.air_pressure_2);
-}
-
-// ********************
-
-// ******超音波センサ******
-
 bool LagopusAltimeter::initUltrasonic(Stream &stream)
 {
-  delay(1000);
+  delay(500);
   ultrasonic.init(stream, PIN_RS485_CTRL);
   return true;
 }
-
-void LagopusAltimeter::updateUltrasonic(){
-  ultrasonic.request(ULTRASONIC, REALTIME);
-  if (ultrasonic.read() != -1){
-    alti.height_1 = ultrasonic.dist;
-  }
-  delay(100);
-  ultrasonic.request(ULTRASONIC, REALTIME);
-  if (ultrasonic.read() != -1){
-    alti.height_2 = ultrasonic.dist;
-  }
-  delay(100);
-  ultrasonic.request(ULTRASONIC, REALTIME);
-  if (ultrasonic.read() != -1){
-    alti.height_3= ultrasonic.dist;
-  }
-}
-
-void LagopusAltimeter::serialUltrasonicOutput(){
-  Serial.print(alti.HEADER);
-  Serial.print(", ");
-  Serial.print(alti.program_time);
-  Serial.print(", ");
-  Serial.print(alti.height_1);
-  Serial.print(", ");
-  Serial.print(alti.height_2);
-  Serial.print(", ");
-  Serial.println(alti.height_3);
-}
-// ************************
 
 void LagopusAltimeter::updateAirSensor(unsigned long millsTime){
   alti.program_time = millsTime;
   // kusojissou
   ultrasonic.request(ULTRASONIC, REALTIME);
+  delay(100);
   if (ultrasonic.read() != -1){
     alti.height_1 = ultrasonic.dist;
   }
-  
   alti.temp = icp.getTemperature();
   // 温度を取得するときに大気圧も取得しているのでその値をそのまま使う
-  alti.air_pressure_1 = icp.getAirPressureFrom_t();
-
-  delay(50);
-  ultrasonic.request(ULTRASONIC, REALTIME);
-  if (ultrasonic.read() != -1){
-    alti.height_2 = ultrasonic.dist;
-  }
-
-  alti.air_pressure_2 = icp.getAirPressure();
-
-  delay(50);
-  ultrasonic.request(ULTRASONIC, REALTIME);
-  if (ultrasonic.read() != -1){
-    alti.height_3= ultrasonic.dist;
-  }
+  alti.air_pressure_1 = icp.getAirPressure();
 }
 
 void LagopusAltimeter::serialAltimeterOutput(){
-  Serial.print(alti.HEADER);
-  Serial.print(", ");
-  Serial.print(alti.program_time);
-  Serial.print(", ");
-  Serial.print(alti.temp);
-  Serial.print(", ");
-  Serial.print(alti.air_pressure_1);
-  Serial.print(", ");
-  Serial.print(alti.air_pressure_2);
-  Serial.print(", ");
-  Serial.print(alti.height_1);
-  Serial.print(", ");
-  Serial.print(alti.height_2);
-  Serial.print(", ");
-  Serial.println(alti.height_3);
+  Serial.printf("height,%f,%ld\n", alti.air_pressure_1, alti.height_1);
 }
