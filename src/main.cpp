@@ -38,27 +38,6 @@ LagopusPowerMeter LsPower;
 // RS485超音波センサ
 SerialPIO mySerial(PIN_RS485_TXPIO0, PIN_RS485_RXPIO0);
 
-<<<<<<< HEAD
-=======
-// BLE受信用nRF52840
-SerialPIO xiaoSerial(PIN_XIAO_TX1, PIN_XIAO_RX1);
-
-
-void getPowerMeterData()
-{
-  xiaoSerial.write("read");
-  delay(20);
-  if (xiaoSerial.available())
-  {
-    delay(20); // データがくるまで待機
-    String data = xiaoSerial.readString();
-    data.trim();
-    data.replace('B', ',');
-    Serial.println(data);
-  }
-}
-
->>>>>>> refs/remotes/origin/master
 // プログラム内の時間
 unsigned long program_time = 0;
 
