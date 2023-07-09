@@ -24,7 +24,6 @@ void LagopusPowerMeter::updatePower(unsigned long millisTime)
   _power.cadence = xiao.getCadence();
   _power.power = xiao.getPowerAvg();
   _power.airSpeed = xiao.getAirSpeed();
-  Serial.println(xiao.getPowerMeterBat());
 }
 
 void LagopusPowerMeter::serialPowerOutput()

@@ -25,7 +25,7 @@ public:
     long height_2=0;
     long height_3=0;
     float air_pressure_1=0;
-    float air_pressure_2=0;
+    unsigned long ctlValue=0;
   }Altimeter;
   Altimeter alti;
   Altimeter* altiptr = &alti;
@@ -42,6 +42,9 @@ public:
   void updateUltrasonic();
   void serialUltrasonicOutput();
   // ************************
+
+  // 磁気センサーの初期化
+  bool initControl();
 
   void updateAirSensor(unsigned long millsTime);
   void serialAltimeterOutput();

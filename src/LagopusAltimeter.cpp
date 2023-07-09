@@ -22,8 +22,13 @@ bool LagopusAltimeter::initAir()
 
 bool LagopusAltimeter::initUltrasonic(Stream &stream)
 {
-  delay(500);
+  delay(100);
   ultrasonic.init(stream, PIN_RS485_CTRL);
+  return true;
+}
+
+bool LagopusAltimeter::initControl(){
+  pinMode(PIN_ADC0, INPUT);
   return true;
 }
 
@@ -38,8 +43,12 @@ void LagopusAltimeter::updateAirSensor(unsigned long millsTime){
   alti.temp = icp.getTemperature();
   // 温度を取得するときに大気圧も取得しているのでその値をそのまま使う
   alti.air_pressure_1 = icp.getAirPressure();
+
+  // 磁気センサ、操舵のパルスの取得
+  alti.ctlValue = pulseIn(PIN_ADC0, HIGH, 1500000);
+
 }
 
 void LagopusAltimeter::serialAltimeterOutput(){
-  Serial.printf("height,%f,%ld\n", alti.air_pressure_1, alti.height_1);
+  Serial.printf("height,%f,%ld, %ld\n", alti.air_pressure_1, alti.height_1, alti.ctlValue);
 }
