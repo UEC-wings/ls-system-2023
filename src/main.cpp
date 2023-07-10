@@ -163,25 +163,21 @@ void loop1()
       }
       dataFile.close();
   }
+
    byte data_size = Serial.available();
 
   if (data_size > 0)
   {
     delay(20);
     data_size = Serial.available();
-    byte buf[data_size];
-    Serial.print(F("data_size "));
-    Serial.println(data_size);
-    for (byte i = 0; i < data_size; i++){
-      buf[i] = Serial.read();
-      Serial.print((char)buf[i]);
+    String data;
+    data = Serial.readString();
+    data.trim();
+    if(data.equals("connect"))
+    {
       pinMode(25, OUTPUT);
       digitalWrite(25, HIGH);
-      delay(500);
-      digitalWrite(25, LOW);
     }
-    
-    Serial.println();
   }
 
 }
