@@ -105,13 +105,12 @@ void setup1()
   すべてのセンサーの初期化が終わり次第loop1のロガー状態に入る
   ビットフラグを用いてセンサーの初期化を確認
   */
-  delay(10000);
+  delay(500);
   Serial1.begin(BAUD_RATE);
   while (!Serial1) Serial.println("eee");
   Audio.init(Serial1);
   delay(500);
-  NutStatus nutStatus = Audio.play("2022_7.wav");
-  Serial.print("ss");
+  NutStatus nutStatus = Audio.play("bw_system_1.wav");
 }
 
 void loop()
@@ -175,8 +174,7 @@ void loop1()
     data.trim();
     if(data.equals("connect"))
     {
-      pinMode(25, OUTPUT);
-      digitalWrite(25, HIGH);
+      Audio.play("bw_system_3.wav");
     }
   }
 
