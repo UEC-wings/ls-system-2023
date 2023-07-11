@@ -14,7 +14,7 @@
 #include "LagopusAltimeter.h"
 #include "LagopusPowerMeter.h"
 #include "LsPinAssign.h"
-#include "LsVoice.h"
+#include "LsState.hpp"
 
 #define BAUD_RATE 115200
 #define SERIALPIO_BAUD_RATE 9600 
@@ -34,6 +34,9 @@ LagopusGNSS LsGNSS;
 LagopusAltimeter LsAlti;
 LagopusPowerMeter LsPower;
 
+// bitFlag、これで状態を確認する。コンストラクタですべてのbitを0にセットしている。
+volatile unsigned int flag;
+LsState LsSt(flag);
 
 // RS485超音波センサ
 SerialPIO mySerial(PIN_RS485_TXPIO0, PIN_RS485_RXPIO0);
@@ -97,6 +100,8 @@ void setup()
   while(!initSD())Serial.println("SD...");
   Serial.println("SD connected");
   delay(100);
+
+  LsSt.onBitFlag(SEONSOR_INIT);
 }
 
 void setup1()
@@ -111,6 +116,35 @@ void setup1()
   Audio.init(Serial1);
   delay(500);
   NutStatus nutStatus = Audio.play("bw_system_1.wav");
+  while (true)
+  {
+    if (LsSt.isBitFlag(SEONSOR_INIT))
+    {
+      Audio.play("bw_system_2.wav");
+      break;
+    }
+  }
+
+  while (true)
+  {
+    byte data_size = Serial.available();
+
+    if (data_size > 0)
+    {
+      delay(20);
+      data_size = Serial.available();
+      String data;
+      data = Serial.readString();
+      data.trim();
+      if(data.equals("connect"))
+      {
+        LsSt.onBitFlag(NAVI_CONNECT);
+        Audio.play("bw_system_3.wav");
+        break;
+      }
+  }
+  }
+
 }
 
 void loop()
@@ -163,19 +197,6 @@ void loop1()
       dataFile.close();
   }
 
-   byte data_size = Serial.available();
 
-  if (data_size > 0)
-  {
-    delay(20);
-    data_size = Serial.available();
-    String data;
-    data = Serial.readString();
-    data.trim();
-    if(data.equals("connect"))
-    {
-      Audio.play("bw_system_3.wav");
-    }
-  }
 
 }
