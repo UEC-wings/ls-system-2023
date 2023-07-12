@@ -5,11 +5,9 @@
 
 class LsState
 {
-  LsState(unsigned int bitFlag);
-  ~LsState();
-private:
-  volatile unsigned int flag;
 public:
+  volatile unsigned int flag;
+  LsState(unsigned int bitFlag);
   void initBitFlag();
   bool isBitFlag(unsigned int n);
   void onBitFlag(unsigned int n);

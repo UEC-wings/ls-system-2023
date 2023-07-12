@@ -47,6 +47,8 @@ unsigned long program_time = 0;
 // センサーログ構造体は32byte固定
 const size_t PAYLOAD_SIZE = (sizeof(float) * 8);
 
+NutStatus nutStatus;
+
 // Androidに送るようのデータ
 long lat;
 long lon;
@@ -110,20 +112,23 @@ void setup1()
   すべてのセンサーの初期化が終わり次第loop1のロガー状態に入る
   ビットフラグを用いてセンサーの初期化を確認
   */
-  delay(500);
+  delay(1000);
   Serial1.begin(BAUD_RATE);
-  while (!Serial1) Serial.println("eee");
+  while (!Serial1) ;
   Audio.init(Serial1);
-  delay(500);
-  NutStatus nutStatus = Audio.play("bw_system_1.wav");
-  while (true)
-  {
-    if (LsSt.isBitFlag(SEONSOR_INIT))
+  delay(1000);
+  nutStatus = Audio.play("bw_system_1.wav");
+  delay(5000);
+  while (true){
+  if (LsSt.isBitFlag(SEONSOR_INIT))
     {
-      Audio.play("bw_system_2.wav");
-      break;
+      nutStatus = Audio.play("bw_system_2.wav");
     }
+    if (nutStatus == NUTTX_PLAY) break;
   }
+  
+
+  
 
   while (true)
   {
@@ -142,7 +147,7 @@ void setup1()
         Audio.play("bw_system_3.wav");
         break;
       }
-  }
+    }
   }
 
 }
@@ -198,5 +203,16 @@ void loop1()
   }
 
 
+  byte data_size = Serial.available();
+
+  if (data_size > 0)
+  {
+    delay(20);
+    data_size = Serial.available();
+    String data;
+    data = Serial.readString();
+    data.trim();
+    Audio.play(data);
+  }
 
 }
