@@ -33,9 +33,17 @@ void LagopusPowerMeter::serialPowerOutput()
 
 bool LagopusPowerMeter::AirMeterIsReady()
 {
-  return xiao.AirMeterIsConnected();
+  if(xiao.AirMeterIsConnected( ) == 1)
+  {
+    return true;
+  }
+  return false;
 }
 bool LagopusPowerMeter::PowerMeterIsReady()
 {
-  return xiao.PowerMeterIsConnected();
+  if(xiao.PowerMeterIsConnected() == 1)
+  {
+    return true;
+  }
+  return false;
 }
