@@ -21,10 +21,10 @@ class XIAOBLE
 union PACKET
 {
   struct {
-    bool AirMeterIsOpen;  //1byte
+    bool AirMeterIsOpen = 0;  //1byte
     float AirSpeed;      //4byte
     float AirMeterBat;   //4byte
-    bool PowerMeterIsOpen; //1byte
+    bool PowerMeterIsOpen = 0; //1byte
     uint16_t Cadence;    //2byte
     uint16_t PowerAvg;   //2byte
     uint16_t PowerMax;   //2byte

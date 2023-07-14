@@ -12,11 +12,14 @@ void XIAOBLE::update()
   while ((_serial->available() < sizeof(PACKET)) && (millis() - LastTime < 500));
   for (uint8_t i = 0; i < sizeof(PACKET); ++i)
   {
+    //Serial.write(pos.bin[i]);
     packet.bin[i] = _serial->read();
   }
+  while (_serial->available() > 0)
+  {
+    _serial->read();
+  }
 }
-
-
 
 bool XIAOBLE::AirMeterIsConnected()
 {
@@ -36,8 +39,7 @@ bool XIAOBLE::PowerMeterIsConnected()
 }
 uint16_t XIAOBLE::getCadence()
 {
-  //return packet.Cadence;
-  return packet.bin[0];
+  return packet.Cadence;
 }
 uint16_t XIAOBLE::getPowerAvg()
 {
