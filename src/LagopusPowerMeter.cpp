@@ -30,3 +30,12 @@ void LagopusPowerMeter::serialPowerOutput()
 {
     Serial.printf("cadence,%d,%d,%f\n", _power.cadence, _power.power, _power.airSpeed);
 }
+
+bool LagopusPowerMeter::AirMeterIsReady()
+{
+  return xiao.AirMeterIsConnected();
+}
+bool LagopusPowerMeter::PowerMeterIsReady()
+{
+  return xiao.PowerMeterIsConnected();
+}

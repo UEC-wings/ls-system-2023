@@ -24,4 +24,6 @@ public:
   bool initPower();
   void updatePower(unsigned long millisTime);
   void serialPowerOutput();
+  bool AirMeterIsReady();
+  bool PowerMeterIsReady();
 };
