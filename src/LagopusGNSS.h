@@ -6,7 +6,7 @@ class LagopusGNSS
 private:
   
 public:
-  LagopusGNSS(/* args */);
+  LagopusGNSS();
   ~LagopusGNSS();
   typedef struct{
     const uint8_t HEADER = 0xF1;

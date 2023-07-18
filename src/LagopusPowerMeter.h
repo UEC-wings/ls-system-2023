@@ -7,7 +7,7 @@ class LagopusPowerMeter
 private:
   XIAOBLE xiao;
 public:
-  LagopusPowerMeter(/* args */);
+  LagopusPowerMeter();
   ~LagopusPowerMeter();
   typedef struct{
     const uint8_t HEADER = 0xF5;

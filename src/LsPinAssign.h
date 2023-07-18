@@ -47,15 +47,15 @@ BNO055タイムアウト回避のためwire.cppを修正しています。>> htt
 #define PIN_RS485_RXPIO0 11
 #define PIN_RS485_CTRL 7
 
-#define PIN_VBAT 26
 //バッテリ電圧 = (10/1.8)*VBATピン電圧
+#define PIN_VBAT 26
 
+//ボタンとアナログピンのGPIO番号は基板上に表記あり
 #define PIN_BUTTON0 21
 #define PIN_BUTTON1 22
-//ボタンとアナログピンのGPIO番号は基板上に表記あり
 #define PIN_ADC0 27
 #define PIN_ADC1 28
 
+//QuickCharge動かないっぽい
 #define PIN_QC_DM 14
 #define PIN_QC_DP 15
-//QuickCharge動かないっぽい

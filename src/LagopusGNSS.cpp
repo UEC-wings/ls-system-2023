@@ -1,6 +1,6 @@
 #include "LagopusGNSS.h"
 
-LagopusGNSS::LagopusGNSS(/* args */)
+LagopusGNSS::LagopusGNSS()
 {
 }
 

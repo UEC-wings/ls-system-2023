@@ -49,11 +49,15 @@ const size_t PAYLOAD_SIZE = (sizeof(float) * 8);
 
 NutStatus nutStatus;
 
+// Serial.available時に受け取るデータサイズ、一時用なので受信したかどうかでしか使わない
+byte data_size = 0;
+
 // Androidに送るようのデータ
 long lat;
 long lon;
 long head;
 long height;
+long groundSpeed;
 unsigned long ctl;
 int cad;
 
@@ -69,19 +73,19 @@ bool initSD()
 void setup() 
 { 
   Serial.begin(BAUD_RATE);
-  delay(1000);
+  delay(100);
   Serial.println("System checking...");
   mySerial.begin(SERIALPIO_BAUD_RATE);
-  delay(500);
+  delay(100);
   
   Wire.setSCL(PIN_IMU_AIR_SCL0);
   Wire.setSDA(PIN_IMU_AIR_SDA0);
   Wire.begin();
-  delay(500);
+  delay(100);
   Wire1.setSCL(PIN_GNSS_SCL1);
   Wire1.setSDA(PIN_GNSS_SDA1);
   Wire1.begin();
-  delay(500);
+  delay(100);
 
   while(!LsImu.initImu())Serial.println("IMU...");
   Serial.println("Imu connected");
@@ -94,7 +98,7 @@ void setup()
   delay(100);
   while(!LsAlti.initUltrasonic(mySerial))Serial.println("Ultrasonic...");
   Serial.println("Ultrasonic connectted");
-    while(!LsAlti.initControl())Serial.println("Ctl...");
+  while(!LsAlti.initControl())Serial.println("Ctl...");
   Serial.println("Control connectted");
   delay(100);
   while(!LsPower.initPower())Serial.println("Power...");
@@ -117,37 +121,38 @@ void setup1()
   while (!Serial1) ;
   Audio.init(Serial1);
   delay(1000);
-  nutStatus = Audio.play("bw_system_1.wav");
+  nutStatus = Audio.play("system_1.wav");
   delay(5000);
+
   while (true){
   if (LsSt.isBitFlag(SEONSOR_INIT))
     {
-      nutStatus = Audio.play("bw_system_2.wav");
+      nutStatus = Audio.play("system_2.wav");
+      if (nutStatus == NUTTX_PLAY) break;
     }
-    if (nutStatus == NUTTX_PLAY) break;
   }
   
-
-  
-
   while (true)
   {
-    byte data_size = Serial.available();
-
+    
+    data_size = Serial.available();
     if (data_size > 0)
     {
+      // 送信側がすべて送信するまでの待ち時間
       delay(20);
-      data_size = Serial.available();
+
       String data;
       data = Serial.readString();
       data.trim();
+      // connectデータがきたらandroidとの接続ができている
       if(data.equals("connect"))
       {
         LsSt.onBitFlag(NAVI_CONNECT);
-        Audio.play("bw_system_3.wav");
+        Audio.play("system_3.wav");
         break;
       }
     }
+    delay(300);
   }
 
 }
@@ -169,6 +174,7 @@ void loop()
   lat = LsGNSS._gnss.latitude;
   lon = LsGNSS._gnss.longitude;
   head = LsGNSS._gnss.heading;
+  groundSpeed = LsGNSS._gnss.groundSpeed;
   
   dataQueue.enqueue(dataGnss);
   
@@ -185,7 +191,7 @@ void loop()
   cad = LsPower._power.cadence;
   dataQueue.enqueue(dataPower);
 
-  Serial.printf("data,%d,%d,%d,%d,%ld,%d\n", lat, lon, head, height, ctl, cad);
+  Serial.printf("data,%d,%d,%d,%d,%ld,%d,%d\n", lat, lon, head, height, ctl, cad, groundSpeed);
 }
 
 void loop1()
@@ -202,9 +208,7 @@ void loop1()
       dataFile.close();
   }
 
-
-  byte data_size = Serial.available();
-
+  data_size = Serial.available();
   if (data_size > 0)
   {
     delay(20);

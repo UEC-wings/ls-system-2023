@@ -39,6 +39,7 @@ bool LagopusPowerMeter::AirMeterIsReady()
   }
   return false;
 }
+
 bool LagopusPowerMeter::PowerMeterIsReady()
 {
   if(xiao.PowerMeterIsConnected() == 1)
