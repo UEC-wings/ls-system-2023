@@ -181,6 +181,7 @@ void loop()
   LsAlti.updateAirSensor(millis());
   
   byte* dataAlti = (byte*)LsAlti.altiptr;
+  // androidに送る用
   height = LsAlti.alti.height_1;
   ctl = LsAlti.alti.ctlValue;
   
@@ -188,10 +189,14 @@ void loop()
 
   LsPower.updatePower(millis());
   byte* dataPower = (byte*)LsPower._powerptr;
+
+  // androidに送る用
   cad = LsPower._power.cadence;
+  
   dataQueue.enqueue(dataPower);
 
-  Serial.printf("data,%d,%d,%d,%d,%ld,%d", lat, lon, head, height, ctl, cad);
+  // android側に送るデータ、android側の実装上の問題で終端文字\nを入れるとフォーマットエラーを引き起こすため注意
+  Serial.printf("data,%d,%d,%d,%d,%ld,%d,%d", lat, lon, head, height, ctl, cad,groundSpeed);
 }
 
 void loop1()
