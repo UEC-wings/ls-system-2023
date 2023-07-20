@@ -53,13 +53,13 @@ NutStatus nutStatus;
 byte data_size = 0;
 
 // Androidに送るようのデータ
-long lat;
-long lon;
-long head;
-long height;
-long groundSpeed;
-unsigned long ctl;
-int cad;
+long lat = 0;
+long lon = 0;
+long head = 0;
+long height = 0;
+long groundSpeed = 0;
+unsigned long ctl = 0;
+int cad = 0;
 
 bool initSD()
 {
@@ -191,7 +191,7 @@ void loop()
   cad = LsPower._power.cadence;
   dataQueue.enqueue(dataPower);
 
-  Serial.printf("data,%d,%d,%d,%d,%ld,%d,%d\n", lat, lon, head, height, ctl, cad, groundSpeed);
+  Serial.printf("data,%d,%d,%d,%d,%ld,%d", lat, lon, head, height, ctl, cad);
 }
 
 void loop1()
