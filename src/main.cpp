@@ -60,6 +60,7 @@ long height = 0;
 long groundSpeed = 0;
 unsigned long ctl = 0;
 int cad = 0;
+int power = 0;
 
 bool initSD()
 {
@@ -192,11 +193,14 @@ void loop()
 
   // androidに送る用
   cad = LsPower._power.cadence;
+  power = LsPower._power.power;
   
   dataQueue.enqueue(dataPower);
 
   // android側に送るデータ、android側の実装上の問題で終端文字\nを入れるとフォーマットエラーを引き起こすため注意
-  Serial.printf("data,%d,%d,%d,%d,%ld,%d,%d", lat, lon, head, height, ctl, cad,groundSpeed);
+  Serial.printf("data,%d,%d,%d,%d,%ld,%d,%d,%d", lat, lon, head, 
+                                              height, ctl, cad, 
+                                              groundSpeed, power);
 }
 
 void loop1()
